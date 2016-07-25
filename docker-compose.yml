@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  django:
+    build: ./server
+    links:
+    - postgres
+    env_file: .env
+  postgres:
+    image: postgres:9.5
+    volumes:
+      - /data/app_name/postgres:/var/lib/postgresql/data
+    env_file: .env
+  nginx:
+    build: ./compose/nginx
+    links:
+      - django
+    ports:
+      - "0.0.0.0:80:80"
