@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres:9.5
+    volumes:
+      - /data/app_name/postgres:/var/lib/postgresql/data
+    env_file: .env.dev
+  django:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-dev
+    links:
+    - postgres
+    env_file: .env.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+    command: python /app/manage.py runserver_plus 0.0.0.0:8000
+
